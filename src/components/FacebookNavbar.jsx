@@ -19,7 +19,9 @@ import {
   Share2, 
   Check, 
   Users,
-  Compass
+  Compass,
+  Smartphone,
+  Download
 } from 'lucide-react';
 
 export default function FacebookNavbar({ 
@@ -36,12 +38,14 @@ export default function FacebookNavbar({
   openOnboarding,
   onLogout,
   searchQuery,
-  setSearchQuery
+  setSearchQuery,
+  openInstallModal
 }) {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [createDropdownOpen, setCreateDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [unreadNotifs, setUnreadNotifs] = useState(3);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   const notifications = [
     { id: 1, text: 'Vaikom Basheer applauded your piece "The Scent of Wet Red Mud"', time: '10m ago', unread: true },
@@ -51,34 +55,45 @@ export default function FacebookNavbar({
 
   return (
     <header className="sticky top-0 z-40 w-full bg-[#111722]/95 backdrop-blur-md border-b border-[#232f3e] shadow-md">
-      <div className="max-w-[1920px] mx-auto px-4 h-14 flex items-center justify-between">
+      <div className="max-w-[1920px] mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
         
         {/* LEFT SECTION: Brand Logo & Search */}
-        <div className="flex items-center space-x-2.5 min-w-[280px]">
+        <div className="flex items-center space-x-2 shrink-0 sm:min-w-[220px]">
           <div 
             onClick={() => setCurrentTab('feed')}
             className="flex items-center space-x-2 cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center shadow-md shadow-emerald-950/40 text-white font-bold text-lg">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center shadow-md shadow-emerald-950/40 text-white font-bold text-base sm:text-lg shrink-0">
               S
             </div>
+            <span className="font-display font-black text-lg sm:text-xl text-white hidden sm:inline-block tracking-wide">
+              Sahyaa
+            </span>
           </div>
 
-          {/* Facebook-style Search Bar */}
-          <div className="relative flex-1 max-w-[240px]">
+          {/* Search Bar (Desktop / Tablet) */}
+          <div className="relative hidden sm:block flex-1 max-w-[220px] lg:max-w-[260px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
               placeholder="Search Sahyaa..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-full bg-[#1e293b]/70 hover:bg-[#1e293b] border border-transparent focus:border-emerald-500/40 text-xs text-white placeholder-slate-400 focus:outline-none transition-all"
+              className="w-full pl-9 pr-3 py-1.5 rounded-full bg-[#1e293b]/70 hover:bg-[#1e293b] border border-transparent focus:border-emerald-500/40 text-xs text-white placeholder-slate-400 focus:outline-none transition-all"
             />
           </div>
+
+          {/* Mobile Search Toggle Icon */}
+          <button
+            onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+            className="sm:hidden p-2 rounded-full bg-[#1e293b] text-slate-300 hover:text-white"
+          >
+            <Search className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* CENTER SECTION: Facebook Navigation Tabs */}
-        <nav className="hidden md:flex items-center justify-center space-x-2 h-full flex-1 max-w-2xl">
+        {/* CENTER SECTION: Facebook Navigation Tabs (Desktop & Tablet) */}
+        <nav className="hidden md:flex items-center justify-center space-x-1 lg:space-x-2 h-full flex-1 max-w-xl">
           {[
             { id: 'feed', label: 'Home Feed', icon: Home },
             { id: 'magazines', label: 'Magazines & Pages', icon: BookMarked },
@@ -93,11 +108,11 @@ export default function FacebookNavbar({
                 key={tab.id}
                 onClick={() => setCurrentTab(tab.id)}
                 title={tab.label}
-                className={`relative flex items-center justify-center px-6 h-full transition-colors group ${
+                className={`relative flex items-center justify-center px-4 lg:px-6 h-full transition-colors group ${
                   isActive ? 'text-emerald-400' : 'text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-xl my-1.5'
                 }`}
               >
-                <Icon className={`w-6 h-6 ${isActive ? 'stroke-[2.5]' : 'stroke-2'}`} />
+                <Icon className={`w-5 h-5 lg:w-6 lg:h-6 ${isActive ? 'stroke-[2.5]' : 'stroke-2'}`} />
                 {isActive && (
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-emerald-400 rounded-t-full shadow-sm shadow-emerald-400/50" />
                 )}
@@ -106,15 +121,25 @@ export default function FacebookNavbar({
           })}
         </nav>
 
-        {/* RIGHT SECTION: Create, Messenger, Notifications & Profile Menu */}
-        <div className="flex items-center space-x-2.5 min-w-[280px] justify-end">
+        {/* RIGHT SECTION: Install App, Create, Notifications & Profile Menu */}
+        <div className="flex items-center space-x-2 shrink-0 sm:min-w-[220px] justify-end">
           
+          {/* Install Web App to Phone Button */}
+          <button
+            onClick={openInstallModal}
+            title="Install Sahyaa on Phone"
+            className="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition-all active:scale-95"
+          >
+            <Smartphone className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="hidden lg:inline">Install App</span>
+          </button>
+
           {/* Quick Create Menu */}
           <div className="relative">
             <button
               onClick={() => setCreateDropdownOpen(!createDropdownOpen)}
               title="Create"
-              className="w-10 h-10 rounded-full bg-[#1e293b] hover:bg-[#2d3a4f] text-slate-200 flex items-center justify-center transition-colors"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1e293b] hover:bg-[#2d3a4f] text-slate-200 flex items-center justify-center transition-colors"
             >
               <Plus className="w-5 h-5" />
             </button>
@@ -157,18 +182,18 @@ export default function FacebookNavbar({
             <button
               onClick={() => { setNotificationsOpen(!notificationsOpen); setUnreadNotifs(0); }}
               title="Notifications"
-              className="relative w-10 h-10 rounded-full bg-[#1e293b] hover:bg-[#2d3a4f] text-slate-200 flex items-center justify-center transition-colors"
+              className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1e293b] hover:bg-[#2d3a4f] text-slate-200 flex items-center justify-center transition-colors"
             >
-              <Bell className="w-5 h-5" />
+              <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
               {unreadNotifs > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center shadow-md">
+                <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-rose-500 text-white text-[9px] sm:text-[10px] font-bold flex items-center justify-center shadow-md">
                   {unreadNotifs}
                 </span>
               )}
             </button>
 
             {notificationsOpen && (
-              <div className="absolute right-0 mt-2 w-80 rounded-2xl glass-panel-elevated bg-[#141c26] border border-white/10 p-3 shadow-2xl z-50 animate-in fade-in space-y-2">
+              <div className="absolute right-0 mt-2 w-72 sm:w-80 rounded-2xl glass-panel-elevated bg-[#141c26] border border-white/10 p-3 shadow-2xl z-50 animate-in fade-in space-y-2">
                 <div className="flex items-center justify-between pb-2 border-b border-white/5">
                   <h4 className="font-semibold text-xs text-white">Notifications</h4>
                   <span className="text-[10px] text-emerald-400 cursor-pointer">Mark all as read</span>
@@ -189,7 +214,7 @@ export default function FacebookNavbar({
           <div className="relative">
             <button
               onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-              className="flex items-center space-x-2 p-1 rounded-full bg-[#1e293b] hover:ring-2 hover:ring-emerald-500/40 transition-all"
+              className="flex items-center space-x-2 p-0.5 rounded-full bg-[#1e293b] hover:ring-2 hover:ring-emerald-500/40 transition-all"
             >
               <img
                 src={currentUser?.avatar || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100'}
@@ -200,7 +225,7 @@ export default function FacebookNavbar({
 
             {profileDropdownOpen && (
               <div 
-                className="absolute right-0 mt-2 w-72 rounded-2xl glass-panel-elevated bg-[#141c26] border border-white/15 p-3 shadow-2xl z-50 animate-in fade-in"
+                className="absolute right-0 mt-2 w-72 max-w-[calc(100vw-2rem)] rounded-2xl glass-panel-elevated bg-[#141c26] border border-white/15 p-3 shadow-2xl z-50 animate-in fade-in"
                 onClick={() => setProfileDropdownOpen(false)}
               >
                 {/* User Header */}
@@ -222,11 +247,27 @@ export default function FacebookNavbar({
 
                 <div className="space-y-1 border-t border-white/10 pt-2">
                   <button
+                    onClick={openProfile}
+                    className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
+                  >
+                    <User className="w-4 h-4 text-slate-400" />
+                    <span>View Timeline & Profile</span>
+                  </button>
+
+                  <button
                     onClick={openEditProfile}
                     className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
                   >
                     <Edit3 className="w-4 h-4 text-emerald-400" />
                     <span>Edit Profile & Bio</span>
+                  </button>
+
+                  <button
+                    onClick={openInstallModal}
+                    className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors font-semibold"
+                  >
+                    <Smartphone className="w-4 h-4 text-emerald-400" />
+                    <span>Install Sahyaa on Phone</span>
                   </button>
 
                   <button
@@ -238,28 +279,30 @@ export default function FacebookNavbar({
                   </button>
 
                   {/* Switch Demo Persona */}
-                  <div className="pt-2 border-t border-white/5">
-                    <span className="text-[10px] font-mono uppercase text-slate-400 px-3 block mb-1">
-                      Switch Active Account:
-                    </span>
-                    <div className="space-y-0.5">
-                      {users.map(u => (
-                        <button
-                          key={u.id}
-                          onClick={() => setCurrentUser(u)}
-                          className={`w-full flex items-center space-x-2 px-3 py-1.5 rounded-lg text-left text-xs ${
-                            currentUser?.id === u.id
-                              ? 'bg-emerald-500/20 text-emerald-300 font-semibold'
-                              : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                          }`}
-                        >
-                          <img src={u.avatar} alt={u.name} className="w-5 h-5 rounded-full object-cover" />
-                          <span className="truncate flex-1">{u.pen_name || u.name}</span>
-                          {currentUser?.id === u.id && <Check className="w-3.5 h-3.5 text-emerald-400" />}
-                        </button>
-                      ))}
+                  {users.length > 1 && (
+                    <div className="pt-2 border-t border-white/5">
+                      <span className="text-[10px] font-mono uppercase text-slate-400 px-3 block mb-1">
+                        Switch Active Account:
+                      </span>
+                      <div className="space-y-0.5 max-h-36 overflow-y-auto">
+                        {users.map(u => (
+                          <button
+                            key={u.id}
+                            onClick={() => setCurrentUser(u)}
+                            className={`w-full flex items-center space-x-2 px-3 py-1.5 rounded-lg text-left text-xs ${
+                              currentUser?.id === u.id
+                                ? 'bg-emerald-500/20 text-emerald-300 font-semibold'
+                                : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                            }`}
+                          >
+                            <img src={u.avatar} alt={u.name} className="w-5 h-5 rounded-full object-cover" />
+                            <span className="truncate flex-1">{u.pen_name || u.name}</span>
+                            {currentUser?.id === u.id && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <div className="pt-2 border-t border-white/10 flex items-center justify-between">
                     <button
@@ -287,6 +330,23 @@ export default function FacebookNavbar({
         </div>
 
       </div>
+
+      {/* Mobile Search Dropdown Bar */}
+      {mobileSearchOpen && (
+        <div className="sm:hidden px-4 py-2 border-t border-white/10 bg-[#0c1015]">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search poems, stories, authors..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-3 py-2 rounded-full bg-[#1e293b] text-xs text-white placeholder-slate-400 focus:outline-none"
+              autoFocus
+            />
+          </div>
+        </div>
+      )}
     </header>
   );
 }

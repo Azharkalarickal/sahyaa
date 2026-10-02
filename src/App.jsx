@@ -18,6 +18,9 @@ import ModerationDashboard from './components/ModerationDashboard.jsx';
 import ArchitectureViewer from './components/ArchitectureViewer.jsx';
 import OnboardingModal from './components/OnboardingModal.jsx';
 import ReportModal from './components/ReportModal.jsx';
+import MobileBottomNav from './components/MobileBottomNav.jsx';
+import InstallAppModal from './components/InstallAppModal.jsx';
+import InstallAppBanner from './components/InstallAppBanner.jsx';
 import { 
   CheckCircle2, 
   Flame, 
@@ -47,6 +50,11 @@ export default function App() {
   const [quoteModalPost, setQuoteModalPost] = useState(null);
   const [onboardingOpen, setOnboardingOpen] = useState(false);
   const [reportTargetPost, setReportTargetPost] = useState(null);
+  const [installModalOpen, setInstallModalOpen] = useState(false);
+
+  // PWA Installation State
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [isAppInstalled, setIsAppInstalled] = useState(false);
 
   // Toast notification
   const [toast, setToast] = useState(null);
@@ -55,6 +63,31 @@ export default function App() {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
   };
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    const handleAppInstalled = () => {
+      setIsAppInstalled(true);
+      setDeferredPrompt(null);
+      showToast('🌿 Sahyaa App installed on phone successfully!');
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsAppInstalled(true);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
 
   // Fetch Users
   const fetchUsers = () => {
@@ -264,7 +297,11 @@ export default function App() {
         onLogout={handleLogout}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        openInstallModal={() => setInstallModalOpen(true)}
       />
+
+      {/* Mobile PWA Install Banner */}
+      <InstallAppBanner openInstallModal={() => setInstallModalOpen(true)} />
 
       {/* Toast Notification Container */}
       {toast && (
@@ -292,7 +329,7 @@ export default function App() {
         />
 
         {/* CENTER COLUMN: Main Feed, Profile, or Module Viewports */}
-        <main className="flex-1 max-w-3xl min-h-[calc(100vh-3.5rem)] px-2 sm:px-4 py-4 space-y-5">
+        <main className="flex-1 max-w-3xl min-h-[calc(100vh-3.5rem)] px-2 sm:px-4 py-4 space-y-5 pb-24 md:pb-8">
           
           {/* VIEW A: HOME DISCOVERY FEED (Facebook Style) */}
           {currentTab === 'feed' && (
@@ -525,6 +562,27 @@ export default function App() {
           onClose={() => setReportTargetPost(null)}
         />
       )}
+
+      {/* PWA Phone Installation Modal */}
+      <InstallAppModal
+        isOpen={installModalOpen}
+        onClose={() => setInstallModalOpen(false)}
+        deferredPrompt={deferredPrompt}
+        isInstalled={isAppInstalled}
+      />
+
+      {/* Mobile-First Bottom Navigation Bar */}
+      <MobileBottomNav
+        currentTab={currentTab}
+        setCurrentTab={(tab) => {
+          if (tab === 'profile') setProfileViewUser(currentUser);
+          setCurrentTab(tab);
+        }}
+        openStudio={() => setStudioOpen(true)}
+        openProfile={() => openUserProfile(currentUser)}
+        currentUser={currentUser}
+        openInstallApp={() => setInstallModalOpen(true)}
+      />
 
     </div>
   );
