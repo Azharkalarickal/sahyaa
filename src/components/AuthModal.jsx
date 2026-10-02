@@ -183,29 +183,6 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess, users = [] }
               <LogIn className="w-4 h-4" />
               <span>{isSubmitting ? 'Verifying...' : 'Log In to Account'}</span>
             </button>
-
-            {/* 1-Click Quick Demo Login Shortcuts */}
-            <div className="pt-3 border-t border-white/10 space-y-2">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
-                Quick 1-Click Demo Logins:
-              </span>
-              <div className="grid grid-cols-2 gap-2">
-                {users.slice(0, 4).map(u => (
-                  <button
-                    key={u.id}
-                    type="button"
-                    onClick={() => quickFillUser(u)}
-                    className="p-2 rounded-xl bg-black/30 hover:bg-emerald-500/10 border border-white/5 hover:border-emerald-500/30 text-left transition-all flex items-center space-x-2"
-                  >
-                    <img src={u.avatar} alt={u.name} className="w-6 h-6 rounded-full object-cover" />
-                    <div className="truncate">
-                      <p className="text-[11px] font-medium text-white truncate">{u.pen_name || u.name}</p>
-                      <p className="text-[9px] text-emerald-400 capitalize">{u.role}</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
           </form>
         )}
 

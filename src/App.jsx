@@ -8,6 +8,7 @@ import FacebookPostCard from './components/FacebookPostCard.jsx';
 import FacebookProfileView from './components/FacebookProfileView.jsx';
 import EditProfileModal from './components/EditProfileModal.jsx';
 import AuthModal from './components/AuthModal.jsx';
+import AuthPage from './components/AuthPage.jsx';
 import ReaderModal from './components/ReaderModal.jsx';
 import StudioEditor from './components/StudioEditor.jsx';
 import MagazinesHub from './components/MagazinesHub.jsx';
@@ -62,13 +63,13 @@ export default function App() {
       .then(data => {
         setUsers(data);
         
-        // Restore session or set default to first user
+        // Restore session only if user previously logged in
         const savedUserId = localStorage.getItem('sahyaa_active_user_id');
-        const found = data.find(u => u.id === Number(savedUserId));
-        if (found) {
-          setCurrentUser(found);
-        } else if (!currentUser && data.length > 0) {
-          setCurrentUser(data[0]);
+        if (savedUserId) {
+          const found = data.find(u => u.id === Number(savedUserId));
+          if (found) {
+            setCurrentUser(found);
+          }
         }
       })
       .catch(() => {});
@@ -117,8 +118,9 @@ export default function App() {
 
   const handleLogout = () => {
     localStorage.removeItem('sahyaa_active_user_id');
+    setCurrentUser(null);
+    setProfileViewUser(null);
     showToast('Logged out of session');
-    setAuthModalOpen(true);
   };
 
   // Profile Update Handler
@@ -220,6 +222,21 @@ export default function App() {
   };
 
   const genres = ['All', 'Poetry', 'Short Stories', 'Essays & Criticism', 'Monsoon Lore', 'Magic Realism'];
+
+  // If user is not authenticated, show full Facebook / Sahyaa Auth Page
+  if (!currentUser) {
+    return (
+      <>
+        <AuthPage onAuthSuccess={handleAuthSuccess} />
+        {toast && (
+          <div className="fixed bottom-6 right-6 z-50 flex items-center space-x-2 px-4 py-3 rounded-2xl glass-panel-elevated bg-[#141d27] border border-emerald-500/40 text-emerald-200 shadow-2xl text-xs font-medium animate-in slide-in-from-bottom-5 duration-200">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>{toast.message}</span>
+          </div>
+        )}
+      </>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0c1015] text-[#e2e8f0] flex flex-col font-ui selection:bg-emerald-800/40 selection:text-emerald-200">
