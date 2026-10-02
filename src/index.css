@@ -1,0 +1,198 @@
+/* Sahyaa Literary Design System */
+:root {
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Cormorant Garamond', Georgia, serif;
+  --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Literary Color Palette */
+  --color-emerald-deep: #06231c;
+  --color-emerald-mid: #0a4335;
+  --color-emerald-accent: #10b981;
+  --color-gold-warm: #d97706;
+  --color-gold-light: #fbbf24;
+  --color-parchment: #fdfbf7;
+  --color-parchment-border: #e8ded1;
+  --color-obsidian-bg: #0c1015;
+  --color-obsidian-surface: #141b24;
+  --color-obsidian-border: #232d3b;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  background-color: var(--color-obsidian-bg);
+  color: #e2e8f0;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #0f141c;
+}
+::-webkit-scrollbar-thumb {
+  background: #273444;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
+/* Typography Utility Classes */
+.font-display {
+  font-family: var(--font-display);
+}
+.font-literary {
+  font-family: var(--font-body);
+}
+.font-ui {
+  font-family: var(--font-ui);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Card & Surface Aesthetics */
+.glass-panel {
+  background: rgba(20, 27, 36, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-elevated {
+  background: rgba(26, 35, 48, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.card-hover-effect {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover-effect:hover {
+  transform: translateY(-3px);
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.15);
+}
+
+/* Reading Immersion Themes */
+.theme-obsidian {
+  background-color: #0d1218;
+  color: #e2e8f0;
+}
+.theme-obsidian .reader-text {
+  color: #cbd5e1;
+}
+
+.theme-emerald {
+  background-color: #051a14;
+  color: #e6f4f1;
+}
+.theme-emerald .reader-text {
+  color: #d1fae5;
+}
+
+.theme-sepia {
+  background-color: #f4ecd8;
+  color: #422d1b;
+}
+.theme-sepia .reader-text {
+  color: #3b2615;
+}
+
+.theme-parchment {
+  background-color: #fbf9f4;
+  color: #1f2937;
+}
+.theme-parchment .reader-text {
+  color: #1a202c;
+}
+
+/* Stanza Spacing for Poetry */
+.poetry-content {
+  white-space: pre-line;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+}
+
+/* Animations */
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(1.3);
+  }
+}
+
+.animate-float-clap {
+  animation: floatUp 0.8s ease-out forwards;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 4s infinite ease-in-out;
+}
+
+/* Custom Gradients */
+.gradient-emerald-gold {
+  background: linear-gradient(135deg, #0a4335 0%, #06231c 50%, #1f1b13 100%);
+}
+.gradient-gold-foil {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gradient-text-emerald {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Quote Card Backgrounds */
+.quote-bg-emerald {
+  background: radial-gradient(circle at 10% 20%, #0a4335 0%, #06231c 90%);
+  color: #f0fdf4;
+}
+.quote-bg-midnight {
+  background: radial-gradient(circle at 80% 20%, #1e1b4b 0%, #0f172a 90%);
+  color: #f8fafc;
+}
+.quote-bg-parchment {
+  background: #fbf8f1;
+  color: #292524;
+  border: 2px solid #e7e0d3;
+}
+.quote-bg-sunset {
+  background: linear-gradient(135deg, #451a03 0%, #1c1917 100%);
+  color: #fef3c7;
+}
+.quote-bg-minimal {
+  background: #18181b;
+  color: #fafafa;
+  border: 1px solid #27272a;
+}
